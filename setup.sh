@@ -65,6 +65,52 @@ function setupSwap() {
     sudo swapon /swapfile
 }
 
+function installSSH() {
+    echo "--------------------------------------------"
+    # echo "Installing SSH..."
+    # sudo apt-get install openssh-client
+    read -p "Generating SSH keys. Enter email address to be associated: " email
+    ssh-keygen -t rsa -b 4096 -C $email
+    touch ~/.ssh/config
+    echo "Adding private key to ssh-agent"
+    ssh-add ~/.ssh/id_rsa
+}
+
+function installJava() {
+    echo "--------------------------------------------"
+    echo "Installing Java 8..."
+    sudo add-apt-repository ppa:webupd8team/java
+    sudo apt-get update
+    sudo apt-get install oracle-java8-installer
+    echo "Setting defaults..."
+    sudo apt-get install oracle-java8-set-default
+}
+
+function installChrome() {
+    echo "--------------------------------------------"
+    echo "Installing Chrome..."
+    wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+    sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
+    sudo apt-get update
+    sudo apt-get install google-chrome-stable
+}
+
+function installFlash() {
+    echo "--------------------------------------------"
+    echo "Installing flash plugin"
+    sudo apt-get install flashplugin-installer
+}
+
+function initGit() {
+    echo "--------------------------------------------"
+    echo "Setting up git..."
+    read -p "Enter name: " name
+    read -p "Enter e-mail address: " email
+    git config --global user.name $name
+    git config --global user.email $email
+    echo "git setup with $name and $email"
+}
+
 function runSetup() {
     err="Invalid process requested. Exiting."
     if [[ $1 == "" ]]; then
@@ -80,6 +126,9 @@ function runSetup() {
         setupPython
         setupOpenInTerminal
         setupSublime
+        installJava
+        installSSH
+        initGit
         setupZsh
     elif [ $1 == "curl" ]; then
         installCurl
@@ -97,6 +146,16 @@ function runSetup() {
         setupSystemPackages
     elif [ $1 == "python" ]; then
         setupPython
+    elif [ $1 == "java" ]; then
+        installJava
+    elif [ $1 == "git-init" ]; then
+        initGit
+    elif [ $1 == "flash" ]; then
+        installFlash
+    elif [ $1 == "ssh" ]; then
+        installSSH
+    elif [ $1 == "chrome" ]; then
+        installChrome
     else
         echo $err
         exit

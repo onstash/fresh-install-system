@@ -4,7 +4,10 @@ This is a bash script to install packages in a freshly installed Ubuntu desktop 
 
 Download - https://raw.githubusercontent.com/thesantosh/fresh-install-system/master/setup.sh
 
-Usage - `sudo bash setup.sh <option>`
+Usage - `$> sudo bash setup.sh <option>` *or*
+        ```$> chmod +x setup.sh
+        $> ./setup.sh <option>
+        ```
 
 Options - 
 * Complete setup - 
