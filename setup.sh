@@ -67,14 +67,13 @@ function setupSwap() {
 
 function installSSH() {
     echo "--------------------------------------------"
-    echo "Installing SSH..."
-    sudo apt-get install openssh-client
+    # echo "Installing SSH..."
+    # sudo apt-get install openssh-client
     read -p "Generating SSH keys. Enter email address to be associated: " email
     ssh-keygen -t rsa -b 4096 -C $email
-    read -p "Enter SSH folder: " ssh_folder
-    touch $ssh_folder/config
+    touch ~/.ssh/config
     echo "Adding private key to ssh-agent"
-    ssh-add $ssh_folder/id_rsa
+    ssh-add ~/.ssh/id_rsa
 }
 
 function installJava() {
@@ -127,10 +126,10 @@ function runSetup() {
         setupPython
         setupOpenInTerminal
         setupSublime
-        setupZsh
         installJava
         installSSH
         initGit
+        setupZsh
     elif [ $1 == "curl" ]; then
         installCurl
     elif [ $1 == "git" ]; then
@@ -147,6 +146,16 @@ function runSetup() {
         setupSystemPackages
     elif [ $1 == "python" ]; then
         setupPython
+    elif [ $1 == "java" ]; then
+        installJava
+    elif [ $1 == "git-init" ]; then
+        initGit
+    elif [ $1 == "flash" ]; then
+        installFlash
+    elif [ $1 == "ssh" ]; then
+        installSSH
+    elif [ $1 == "chrome" ]; then
+        installChrome
     else
         echo $err
         exit
